@@ -1,1 +1,6 @@
-{"navigationBarTitleText":"购物车","navigationBarBackgroundColor":"#0b0c10","navigationBarTextStyle":"white","backgroundColor":"#0b0c10"}
+{
+  "navigationBarTitleText": "购物车",
+  "navigationBarBackgroundColor": "#0b0c10",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#0b0c10"
+}

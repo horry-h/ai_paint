@@ -68,146 +68,58 @@ if (THREE && THREE.global) {
   };
   
   SimpleOBJLoader.prototype.parse = function(text) {
-    console.log('开始解析OBJ文件，数据长度:', text.length);
-    
-    // 改进的OBJ解析器
+    // 简化的OBJ解析器
     const lines = text.split('\n');
     const vertices = [];
-    const normals = [];
-    const uvs = [];
     const faces = [];
-    
-    console.log('OBJ文件总行数:', lines.length);
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
-      if (!line || line.startsWith('#')) continue;
-      
       const parts = line.split(/\s+/);
-      const type = parts[0];
       
-      switch (type) {
-        case 'v': // 顶点
-          if (parts.length >= 4) {
-            vertices.push([
-              parseFloat(parts[1]),
-              parseFloat(parts[2]),
-              parseFloat(parts[3])
-            ]);
-          }
-          break;
-          
-        case 'vn': // 法线
-          if (parts.length >= 4) {
-            normals.push([
-              parseFloat(parts[1]),
-              parseFloat(parts[2]),
-              parseFloat(parts[3])
-            ]);
-          }
-          break;
-          
-        case 'vt': // 纹理坐标
-          if (parts.length >= 3) {
-            uvs.push([
-              parseFloat(parts[1]),
-              parseFloat(parts[2])
-            ]);
-          }
-          break;
-          
-        case 'f': // 面
-          if (parts.length >= 4) {
-            const face = [];
-            for (let j = 1; j < parts.length; j++) {
-              const vertexData = parts[j].split('/');
-              const vertexIndex = parseInt(vertexData[0]) - 1;
-              face.push(vertexIndex);
-            }
-            faces.push(face);
-          }
-          break;
+      if (parts[0] === 'v' && parts.length >= 4) {
+        vertices.push([
+          parseFloat(parts[1]),
+          parseFloat(parts[2]),
+          parseFloat(parts[3])
+        ]);
+      } else if (parts[0] === 'f' && parts.length >= 4) {
+        const face = [];
+        for (let j = 1; j < parts.length; j++) {
+          const vertexIndex = parseInt(parts[j].split('/')[0]) - 1;
+          face.push(vertexIndex);
+        }
+        faces.push(face);
       }
-    }
-    
-    console.log('解析结果:', {
-      vertices: vertices.length,
-      normals: normals.length,
-      uvs: uvs.length,
-      faces: faces.length
-    });
-    
-    if (vertices.length === 0 || faces.length === 0) {
-      console.error('OBJ文件解析失败：没有找到顶点或面数据');
-      throw new Error('Invalid OBJ file: no vertices or faces found');
     }
     
     // 创建几何体
     const geometry = new THREE.BufferGeometry();
     const positions = [];
-    const normalsArray = [];
-    const uvsArray = [];
+    const indices = [];
     
-    // 处理面数据
     for (let i = 0; i < faces.length; i++) {
       const face = faces[i];
       if (face.length >= 3) {
-        // 三角化多边形面
+        // 添加三角形
         for (let j = 0; j < face.length - 2; j++) {
           const v1 = vertices[face[0]];
           const v2 = vertices[face[j + 1]];
           const v3 = vertices[face[j + 2]];
           
-          // 添加顶点位置
           positions.push(v1[0], v1[1], v1[2]);
           positions.push(v2[0], v2[1], v2[2]);
           positions.push(v3[0], v3[1], v3[2]);
-          
-          // 添加法线（如果有的话）
-          if (normals.length > 0) {
-            const n1 = normals[face[0]] || [0, 1, 0];
-            const n2 = normals[face[j + 1]] || [0, 1, 0];
-            const n3 = normals[face[j + 2]] || [0, 1, 0];
-            normalsArray.push(n1[0], n1[1], n1[2]);
-            normalsArray.push(n2[0], n2[1], n2[2]);
-            normalsArray.push(n3[0], n3[1], n3[2]);
-          }
-          
-          // 添加纹理坐标（如果有的话）
-          if (uvs.length > 0) {
-            const uv1 = uvs[face[0]] || [0, 0];
-            const uv2 = uvs[face[j + 1]] || [0, 0];
-            const uv3 = uvs[face[j + 2]] || [0, 0];
-            uvsArray.push(uv1[0], uv1[1]);
-            uvsArray.push(uv2[0], uv2[1]);
-            uvsArray.push(uv3[0], uv3[1]);
-          }
         }
       }
     }
     
-    // 设置几何体属性
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    
-    if (normalsArray.length > 0) {
-      geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normalsArray, 3));
-    } else {
-      geometry.computeVertexNormals();
-    }
-    
-    if (uvsArray.length > 0) {
-      geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvsArray, 2));
-    }
-    
-    console.log('几何体创建完成:', {
-      positionCount: positions.length / 3,
-      normalCount: normalsArray.length / 3,
-      uvCount: uvsArray.length / 2
-    });
+    geometry.computeVertexNormals();
     
     // 创建材质和网格
     const material = new THREE.MeshBasicMaterial({ 
-      color: 0x8B4513, // 木色
+      color: 0x888888,
       side: THREE.DoubleSide
     });
     
@@ -215,7 +127,6 @@ if (THREE && THREE.global) {
     const group = new THREE.Group();
     group.add(mesh);
     
-    console.log('OBJ解析完成，返回模型组');
     return group;
   };
   

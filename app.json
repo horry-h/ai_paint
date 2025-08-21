@@ -17,8 +17,5 @@
     "backgroundColor": "#0b0c10"
   },
   "libVersion": "3.0.0",
-  "style": "v2",
-  "componentFramework": "glass-easel",
-  "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "sitemapLocation": "sitemap.json"
 }

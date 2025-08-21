@@ -1,1 +1,4 @@
-<!-- 购物车页面 --><view class="page"><text>购物车页面</text></view>
+<!-- 购物车页面 -->
+<view class="page">
+  <text>购物车页面</text>
+</view>
