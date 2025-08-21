@@ -1,0 +1,85 @@
+<!-- 选框页面 -->
+<view class="page">
+  <!-- 图片预览 -->
+  <view class="preview-section">
+    <view class="preview-card">
+      <image wx:if="{{selectedImage}}" class="preview-image" src="{{selectedImage}}" mode="aspectFit"></image>
+      <view wx:elif="{{aiGeneratedColor}}" class="preview-ai" style="background: {{aiGeneratedColor}}">
+        <text class="ai-text">AI生成图片</text>
+      </view>
+      <view wx:else class="preview-placeholder">
+        <text class="placeholder-icon">📷</text>
+        <text class="placeholder-text">选择图片预览</text>
+      </view>
+      <view class="preview-overlay">
+        <text class="preview-text">预览效果</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 相框样式选择 -->
+  <view class="style-section">
+    <text class="section-title">相框样式</text>
+    <scroll-view class="style-scroll" scroll-x>
+              <view class="style-list">
+          <view 
+            class="style-item {{selectedStyle === item.id ? 'active' : ''}}"
+            wx:for="{{styles}}" 
+            wx:key="id"
+            data-id="{{item.id}}"
+            bindtap="selectStyle"
+          >
+            <view class="style-preview" style="background: {{item.color}}">
+              <text class="style-text">{{item.name}}</text>
+            </view>
+            <text class="style-name">{{item.name}}</text>
+            <text class="style-price">¥{{item.price}}</text>
+          </view>
+        </view>
+    </scroll-view>
+  </view>
+
+  <!-- 尺寸选择 -->
+  <view class="size-section">
+    <text class="section-title">尺寸选择</text>
+    <view class="size-grid">
+      <view 
+        class="size-item {{selectedSize === item.id ? 'active' : ''}}"
+        wx:for="{{sizes}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="selectSize"
+      >
+        <text class="size-name">{{item.name}}</text>
+        <text class="size-desc">{{item.desc}}</text>
+        <text class="size-price">¥{{item.price}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 卡纸颜色 -->
+  <view class="mat-section">
+    <text class="section-title">卡纸颜色</text>
+    <view class="mat-grid">
+      <view 
+        class="mat-item {{selectedMat === item.id ? 'active' : ''}}"
+        wx:for="{{mats}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="selectMat"
+      >
+        <view class="mat-color" style="background: {{item.color}}"></view>
+        <text class="mat-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 价格和操作 -->
+  <view class="action-section">
+    <view class="price-info">
+      <text class="price-label">预计价格</text>
+      <text class="price-value">¥{{totalPrice}}</text>
+    </view>
+    <button class="preview-btn" bindtap="goPreview">3D 预览</button>
+  </view>
+</view>

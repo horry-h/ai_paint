@@ -1,0 +1,209 @@
+/* pages/orders/orders.wxss */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0b0c10 0%, #1a1a2e 100%);
+  padding-bottom: 30rpx;
+}
+
+/* 页面标题 */
+.page-header {
+  padding: 40rpx 30rpx 30rpx;
+  text-align: center;
+}
+
+.page-title {
+  color: white;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 订单列表 */
+.orders-list {
+  padding: 0 30rpx;
+}
+
+.order-item {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20rpx);
+  border-radius: 20rpx;
+  margin-bottom: 30rpx;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.order-header {
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.order-number {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 26rpx;
+}
+
+.order-status {
+  font-size: 26rpx;
+  font-weight: bold;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.order-status.pending {
+  color: #F39C12;
+  background: rgba(243, 156, 18, 0.1);
+}
+
+.order-status.paid {
+  color: #50C878;
+  background: rgba(80, 200, 120, 0.1);
+}
+
+.order-content {
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+}
+
+.product-preview {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 15rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+}
+
+.product-ai {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #4A90E2, #50C878);
+}
+
+.ai-text {
+  color: white;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.product-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 40rpx;
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.product-title {
+  color: white;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.product-desc {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 26rpx;
+}
+
+.product-price {
+  color: #FF6B6B;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.order-footer {
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.order-time {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24rpx;
+}
+
+.order-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn-pay {
+  background: linear-gradient(135deg, #4A90E2, #50C878);
+  color: white;
+  border: none;
+  border-radius: 25rpx;
+  padding: 15rpx 30rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+.btn-detail {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25rpx;
+  padding: 15rpx 30rpx;
+  font-size: 26rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 30rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 40rpx;
+}
+
+.empty-text {
+  color: white;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.empty-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 28rpx;
+  margin-bottom: 60rpx;
+}
+
+.btn-shop {
+  background: linear-gradient(135deg, #4A90E2, #50C878);
+  color: white;
+  border: none;
+  border-radius: 50rpx;
+  padding: 25rpx 60rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}

@@ -1,0 +1,46 @@
+<!-- 上传页面 -->
+<view class="page">
+  <!-- 图片选择区域 -->
+  <view class="upload-section">
+    <view class="upload-card">
+      <view class="upload-area" bindtap="chooseImage">
+        <image wx:if="{{selectedImage}}" class="preview-image" src="{{selectedImage}}" mode="aspectFit"></image>
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">📷</text>
+          <text class="upload-text">点击选择图片</text>
+          <text class="upload-desc">支持 JPG、PNG 格式</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 裁切选项 -->
+  <view class="crop-section" wx:if="{{selectedImage}}">
+    <text class="section-title">裁切比例</text>
+    <view class="crop-grid">
+      <view 
+        class="crop-item {{selectedRatio === item.value ? 'active' : ''}}"
+        wx:for="{{cropRatios}}" 
+        wx:key="value"
+        data-value="{{item.value}}"
+        bindtap="selectRatio"
+      >
+        <view class="crop-preview" style="aspect-ratio: {{item.value}};"></view>
+        <text class="crop-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section" wx:if="{{selectedImage}}">
+    <button class="btn-secondary" bindtap="resetImage">重新选择</button>
+    <button class="btn-primary" bindtap="useImage">使用图片</button>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!selectedImage}}">
+    <view class="empty-icon">📸</view>
+    <text class="empty-title">选择您的照片</text>
+    <text class="empty-desc">上传照片后可以调整裁切比例</text>
+  </view>
+</view>

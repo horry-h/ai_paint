@@ -1,0 +1,57 @@
+<!-- 订单页面 -->
+<view class="page">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">我的订单</text>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="orders-list">
+    <view class="order-item" wx:for="{{orders}}" wx:key="id">
+      <view class="order-header">
+        <text class="order-number">订单号：{{item.orderNumber}}</text>
+        <text class="order-status {{item.status === 'paid' ? 'paid' : 'pending'}}">
+          {{item.status === 'paid' ? '已支付' : '待支付'}}
+        </text>
+      </view>
+      
+      <view class="order-content">
+        <view class="product-preview">
+          <image wx:if="{{item.image}}" class="product-image" src="{{item.image}}" mode="aspectFit"></image>
+          <view wx:elif="{{item.aiGeneratedColor}}" class="product-ai" style="background: {{item.aiGeneratedColor}}">
+            <text class="ai-text">AI生成</text>
+          </view>
+          <view wx:else class="product-placeholder">
+            <text class="placeholder-icon">📷</text>
+          </view>
+        </view>
+        
+        <view class="product-info">
+          <text class="product-title">定制相框</text>
+          <text class="product-desc">{{item.styleName}} · {{item.sizeName}} · {{item.matName}}</text>
+          <text class="product-price">¥{{item.price}}</text>
+        </view>
+      </view>
+      
+      <view class="order-footer">
+        <text class="order-time">{{item.createTime}}</text>
+        <view class="order-actions">
+          <button wx:if="{{item.status === 'pending'}}" class="btn-pay" bindtap="payOrder" data-id="{{item.id}}">
+            立即支付
+          </button>
+          <button wx:if="{{item.status === 'paid'}}" class="btn-detail" bindtap="viewDetail" data-id="{{item.id}}">
+            查看详情
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{orders.length === 0}}" class="empty-state">
+    <text class="empty-icon">📦</text>
+    <text class="empty-text">暂无订单</text>
+    <text class="empty-desc">快去选购心仪的相框吧</text>
+    <button class="btn-shop" bindtap="goShop">去购物</button>
+  </view>
+</view>

@@ -1,0 +1,74 @@
+<!-- 首页 - 专业UI设计 -->
+<view class="page">
+  <!-- 顶部横幅 -->
+  <view class="hero-section">
+    <view class="hero-content">
+      <text class="hero-title">定制专属相框</text>
+      <text class="hero-subtitle">AI智能生成 · 专业装裱 · 品质保证</text>
+    </view>
+    <view class="hero-bg"></view>
+  </view>
+
+  <!-- 快速操作区 -->
+  <view class="quick-actions">
+    <view class="action-card primary" bindtap="goGenerate">
+      <view class="action-icon">✨</view>
+      <text class="action-title">AI 智能生成</text>
+      <text class="action-desc">输入描述，AI为您创作</text>
+    </view>
+    
+    <view class="action-card" bindtap="chooseImage">
+      <view class="action-icon">📷</view>
+      <text class="action-title">上传照片</text>
+      <text class="action-desc">选择您的珍贵回忆</text>
+    </view>
+    
+    <view class="action-card" bindtap="goFrame">
+      <view class="action-icon">🖼️</view>
+      <text class="action-title">直接选框</text>
+      <text class="action-desc">浏览精美相框样式</text>
+    </view>
+  </view>
+
+  <!-- 最近作品 -->
+  <view class="recent-section">
+    <view class="section-header">
+      <text class="section-title">最近作品</text>
+      <text class="section-more" bindtap="goOrders">查看全部</text>
+    </view>
+    
+    <scroll-view class="recent-scroll" scroll-x>
+      <view class="recent-list">
+        <block wx:for="{{recentImages}}" wx:key="*this">
+          <view class="recent-item">
+            <image src="{{item}}" mode="aspectFill"></image>
+            <view class="recent-overlay">
+              <text class="recent-date">{{item.date || '刚刚'}}</text>
+            </view>
+          </view>
+        </block>
+        <view wx:if="{{!recentImages.length}}" class="empty-state">
+          <text class="empty-icon">📸</text>
+          <text class="empty-text">还没有作品</text>
+          <text class="empty-desc">开始创作您的第一个相框吧</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 推荐样式 -->
+  <view class="featured-section">
+    <text class="section-title">热门样式</text>
+            <view class="featured-grid">
+          <view class="featured-item" wx:for="{{featuredStyles}}" wx:key="id" data-style="{{item}}" bindtap="selectFeaturedStyle">
+            <view class="featured-preview" style="background: {{item.color}}">
+              <text class="featured-text">{{item.name}}</text>
+            </view>
+            <view class="featured-info">
+              <text class="featured-name">{{item.name}}</text>
+              <text class="featured-price">¥{{item.price}}</text>
+            </view>
+          </view>
+        </view>
+  </view>
+</view>

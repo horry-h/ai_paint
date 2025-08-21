@@ -1,0 +1,297 @@
+/** 3D预览页面样式 */
+page {
+  background: linear-gradient(135deg, #0b0c10 0%, #1a1d2a 100%);
+  color: #e7ecf3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+/* 预览区域 */
+.preview-section {
+  padding: 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.preview-container {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24rpx;
+  overflow: hidden;
+  backdrop-filter: blur(20rpx);
+}
+
+.touch-hint {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10rpx);
+  border-radius: 20rpx;
+  padding: 12rpx 20rpx;
+  z-index: 10;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+.hint-text {
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.webgl-canvas {
+  width: 100%;
+  height: 500rpx;
+  display: block;
+}
+
+/* 备用2D预览 */
+.fallback-preview {
+  width: 100%;
+  height: 500rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000rpx;
+}
+
+.frame-preview {
+  width: 300rpx;
+  height: 200rpx;
+  border: 8rpx solid #8B4513;
+  border-radius: 8rpx;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.frame-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.model-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2a2a3a 0%, #1a1a2e 100%);
+}
+
+.placeholder-text {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.placeholder-subtext {
+  color: #8891a4;
+  font-size: 22rpx;
+  font-weight: 400;
+}
+
+/* 加载状态 */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11, 12, 16, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.1);
+  border-top: 4rpx solid #4f8cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #8891a4;
+}
+
+/* 错误状态 */
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11, 12, 16, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.6;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #8891a4;
+  margin-bottom: 32rpx;
+}
+
+.retry-btn {
+  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  border: none;
+  border-radius: 16rpx;
+  padding: 16rpx 32rpx;
+  color: #ffffff;
+  font-size: 26rpx;
+}
+
+/* 控制区域 */
+.controls-section {
+  padding: 0 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.control-tips {
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.tip-text {
+  color: #8891a4;
+  font-size: 26rpx;
+  font-weight: 400;
+}
+
+.control-row {
+  display: flex;
+  gap: 16rpx;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  flex: 1;
+  min-width: 120rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16rpx;
+  padding: 20rpx 16rpx;
+  color: #e7ecf3;
+  font-size: 26rpx;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.control-btn:active {
+  background: rgba(79, 140, 255, 0.1);
+  border-color: #4f8cff;
+}
+
+/* 信息区域 */
+.info-section {
+  padding: 0 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  backdrop-filter: blur(20rpx);
+}
+
+.info-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #e7ecf3;
+  margin-bottom: 24rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #8891a4;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #e7ecf3;
+}
+
+.info-price {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #4f8cff;
+}
+
+/* 操作区域 */
+.action-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(11, 12, 16, 0.95);
+  backdrop-filter: blur(20rpx);
+  padding: 32rpx;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 24rpx;
+}
+
+.btn-secondary {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  color: #e7ecf3;
+  font-size: 28rpx;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  border: none;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 32rpx rgba(79, 140, 255, 0.3);
+}

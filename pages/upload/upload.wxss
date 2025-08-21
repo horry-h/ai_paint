@@ -1,0 +1,178 @@
+/** 上传页面样式 */
+page {
+  background: linear-gradient(135deg, #0b0c10 0%, #1a1d2a 100%);
+  color: #e7ecf3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 32rpx;
+}
+
+/* 上传区域 */
+.upload-section {
+  margin-bottom: 60rpx;
+}
+
+.upload-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  backdrop-filter: blur(20rpx);
+}
+
+.upload-area {
+  min-height: 400rpx;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.upload-area:active {
+  border-color: #4f8cff;
+  background: rgba(79, 140, 255, 0.05);
+}
+
+.preview-image {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 16rpx;
+  object-fit: cover;
+}
+
+.upload-placeholder {
+  text-align: center;
+  padding: 60rpx 40rpx;
+}
+
+.upload-icon {
+  display: block;
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.6;
+}
+
+.upload-text {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #e7ecf3;
+  margin-bottom: 12rpx;
+}
+
+.upload-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #8891a4;
+}
+
+/* 裁切区域 */
+.crop-section {
+  margin-bottom: 60rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #e7ecf3;
+  margin-bottom: 24rpx;
+}
+
+.crop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.crop-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.crop-item.active {
+  border-color: #4f8cff;
+  background: rgba(79, 140, 255, 0.1);
+}
+
+.crop-preview {
+  width: 100%;
+  max-width: 120rpx;
+  margin: 0 auto 16rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8rpx;
+}
+
+.crop-name {
+  display: block;
+  font-size: 26rpx;
+  color: #e7ecf3;
+}
+
+/* 操作区域 */
+.action-section {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 60rpx;
+}
+
+.btn-secondary {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  color: #e7ecf3;
+  font-size: 28rpx;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  border: none;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 32rpx;
+  opacity: 0.5;
+}
+
+.empty-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #e7ecf3;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #8891a4;
+  line-height: 1.5;
+}

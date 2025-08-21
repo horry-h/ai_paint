@@ -1,0 +1,96 @@
+<!-- AI生成页面 -->
+<view class="page">
+  <!-- 提示词输入区 -->
+  <view class="input-section">
+    <view class="input-card">
+      <text class="section-title">AI 提示词</text>
+      <textarea 
+        class="prompt-input" 
+        placeholder="例如：日落下的海边婚纱照，柔和胶片风格，温暖色调" 
+        value="{{prompt}}" 
+        bindinput="onPromptInput"
+        maxlength="200"
+        auto-height
+      ></textarea>
+      <view class="char-count">{{prompt.length}}/200</view>
+    </view>
+
+    <!-- 快速标签 -->
+    <view class="tags-section">
+      <text class="section-title">快速标签</text>
+      <view class="tags-grid">
+        <view 
+          class="tag {{item.active ? 'active' : ''}}" 
+          wx:for="{{tags}}" 
+          wx:key="text"
+          data-index="{{index}}"
+          bindtap="toggleTag"
+        >
+          {{item.text}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 生成选项 -->
+    <view class="options-section">
+      <view class="option-row">
+        <text class="option-label">生成风格</text>
+        <picker 
+          mode="selector" 
+          range="{{models}}" 
+          value="{{modelIndex}}" 
+          bindchange="onModelChange"
+        >
+          <view class="picker-btn">
+            <text>{{models[modelIndex]}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      
+      <button class="generate-btn" bindtap="onGenerate" disabled="{{isGenerating}}">
+        <text wx:if="{{!isGenerating}}">✨ 开始生成</text>
+        <text wx:else>生成中...</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 生成结果 -->
+  <view class="results-section" wx:if="{{genImages.length > 0}}">
+    <view class="results-header">
+      <text class="section-title">生成结果</text>
+      <text class="results-count">{{genImages.length}} 张图片</text>
+    </view>
+    
+          <view class="results-grid">
+        <view 
+          class="result-item {{selectedIndex === index ? 'selected' : ''}}"
+          wx:for="{{genImages}}" 
+          wx:key="index"
+          data-index="{{index}}"
+          bindtap="selectResult"
+        >
+          <view class="result-preview" style="background: {{item}}">
+            <text class="result-text">AI生成{{index+1}}</text>
+          </view>
+          <view class="select-overlay">
+            <text class="select-icon">✓</text>
+          </view>
+        </view>
+      </view>
+
+    <view class="action-bar">
+      <button class="btn-secondary" bindtap="regenerate">重新生成</button>
+      <button class="btn-primary" bindtap="useSelected" disabled="{{selectedIndex === -1}}">
+        使用所选图片
+      </button>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!isGenerating && genImages.length === 0}}">
+    <view class="empty-icon">🎨</view>
+    <text class="empty-title">开始AI创作</text>
+    <text class="empty-desc">输入您的创意描述，AI将为您生成独特的图片</text>
+  </view>
+</view>

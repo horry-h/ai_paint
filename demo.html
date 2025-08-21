@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+	<title>定制相框 - 原型</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkfAmQ0H2QJ5rWQ9jwELKqBfV9HkGqVdZ1G8G1JZ4Z7+eY3fZ8+7W4r6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<style>
+		:root { --bg:#0b0c10; --card:#121318; --muted:#8891a4; --text:#e7ecf3; --brand:#4f8cff; --accent:#ffd166; --ok:#22c55e; --err:#ef4444; --line:#1f2330; }
+		* { box-sizing: border-box; }
+		html, body { margin:0; padding:0; height:100%; background:var(--bg); color:var(--text); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; }
+		button, input, select, textarea { font: inherit; color: inherit; }
+		.container { max-width: 480px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+		.topbar { height:56px; display:flex; align-items:center; padding:0 16px; gap:12px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)); position: sticky; top: 0; z-index: 10; }
+		.topbar .title { font-weight: 600; }
+		.content { flex: 1; padding: 16px; }
+		.tabbar { height:60px; display:flex; border-top:1px solid var(--line); position: sticky; bottom: 0; background: rgba(10,11,15,0.9); backdrop-filter: blur(8px); }
+		.tabbar button { flex:1; background:none; border:none; color:var(--muted); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px; }
+		.tabbar button.active { color: var(--text); }
+		.grid { display:grid; gap:12px; }
+		.grid.cols-2 { grid-template-columns: 1fr 1fr; }
+		.grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+		.card { background: var(--card); border:1px solid var(--line); border-radius: 12px; padding: 12px; }
+		.btn { background: var(--brand); color:#fff; border:none; border-radius: 10px; padding: 12px 14px; font-weight:600; cursor:pointer; }
+		.btn.ghost { background: transparent; border:1px solid var(--line); color: var(--text); }
+		.btn.full { width:100%; }
+		.btn.alt { background: var(--accent); color:#000; }
+		.row { display:flex; gap: 12px; align-items:center; }
+		.row.wrap { flex-wrap: wrap; }
+		.row.between { justify-content: space-between; }
+		.label { color: var(--muted); font-size: 12px; }
+		.input, select { width:100%; background: #0f1117; color: var(--text); border:1px solid var(--line); border-radius:10px; padding: 10px 12px; }
+		.kbd { border:1px solid var(--line); border-bottom-width:2px; background:#0f1117; padding:2px 6px; border-radius:6px; font-size:12px; color:var(--muted); }
+		.section-title { font-weight: 600; margin: 6px 0 10px; }
+		.badge { padding:6px 10px; background:#0f1117; border:1px solid var(--line); color:var(--muted); border-radius:20px; cursor:pointer; }
+		.badge.active { background: #15203b; color: #cfe0ff; border-color:#284070; }
+		.screen { display:none; }
+		.screen.active { display:block; animation: fade .22s ease; }
+		@keyframes fade { from { opacity:.6; transform: translateY(4px);} to{ opacity:1; transform:none; } }
+		.hr { height:1px; background: var(--line); margin: 12px 0; }
+		.thumb { width:100%; aspect-ratio: 1/1; border-radius: 10px; background: linear-gradient(135deg,#1d2636,#0e1422); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:#5f6c85; }
+		.thumb img { width:100%; height:100%; object-fit: cover; border-radius:10px; }
+		.price { font-weight:700; }
+		.notice { font-size:12px; color: var(--muted); }
+		/* 3D 预览占位 */
+		.preview3d { height: 260px; border-radius:12px; border:1px solid var(--line); background: conic-gradient(from 180deg at 50% 50%, #111 0deg, #0b0c10 360deg); display:grid; place-items:center; position:relative; overflow:hidden; }
+		.preview3d .cube { width: 160px; height: 100px; border:2px solid #284070; transform: perspective(500px) rotateX(18deg) rotateY(-28deg); background:#0d1526; box-shadow: 0 10px 40px rgba(79,140,255,.18) inset; display:grid; place-items:center; }
+		.preview3d .cube .image { width: 120px; height: 80px; background: #222; border:2px solid #555; overflow:hidden; }
+		.preview3d .cube .image img { width:100%; height:100%; object-fit:cover; }
+		.toolbar { display:flex; gap:8px; }
+		.table { width:100%; border-collapse: collapse; }
+		.table th, .table td { text-align:left; padding:10px; border-bottom:1px solid var(--line); }
+		.float { position: fixed; right: 16px; bottom: 80px; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="topbar">
+			<button class="btn ghost" id="backBtn"><i class="fa-solid fa-chevron-left"></i></button>
+			<div class="title">定制相框</div>
+			<div style="flex:1"></div>
+			<button class="btn ghost" data-nav="cart"><i class="fa-solid fa-cart-shopping"></i></button>
+		</div>
+		<div class="content">
+			<!-- 首页 -->
+			<section class="screen active" id="home">
+				<div class="card">
+					<div class="section-title">开始创作</div>
+					<div class="grid cols-2">
+						<button class="btn" data-nav="generate"><i class="fa-solid fa-wand-magic-sparkles"></i> AI 生成</button>
+						<label class="btn" for="fileInput"><i class="fa-solid fa-upload"></i> 上传图片</label>
+						<input id="fileInput" type="file" accept="image/*" style="display:none" />
+						<button class="btn ghost" data-nav="frame"><i class="fa-solid fa-vector-square"></i> 直接选框</button>
+					</div>
+					<div class="hr"></div>
+					<div class="row between">
+						<div class="label">最近作品</div>
+						<button class="btn ghost" data-nav="orders">查看订单</button>
+					</div>
+					<div class="grid cols-3" id="recentGrid"></div>
+				</div>
+			</section>
+
+			<!-- AI 生成 -->
+			<section class="screen" id="generate">
+				<div class="card">
+					<div class="section-title">AI 提示词</div>
+					<input id="prompt" class="input" placeholder="例如：日落下的海边婚纱照，柔和胶片风" />
+					<div class="row wrap" style="margin-top:8px">
+						<span class="badge" data-tag>人像</span>
+						<span class="badge" data-tag>风景</span>
+						<span class="badge" data-tag>油画</span>
+						<span class="badge" data-tag>黑白</span>
+						<span class="badge" data-tag>胶片</span>
+					</div>
+					<div class="row between" style="margin-top:12px">
+						<select id="model" class="input">
+							<option value="photo">摄影</option>
+							<option value="art">艺术</option>
+						</select>
+						<button class="btn" id="btnGenerate"><i class="fa-solid fa-wand-magic-sparkles"></i> 生成</button>
+					</div>
+				</div>
+				<div class="card" style="margin-top:12px">
+					<div class="section-title">候选结果</div>
+					<div class="grid cols-3" id="genGrid"></div>
+					<div class="row between" style="margin-top:8px">
+						<div class="label">选择一张用于装框</div>
+						<button class="btn" id="useGen">使用所选</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 上传 -->
+			<section class="screen" id="upload">
+				<div class="card">
+					<div class="section-title">上传并裁切</div>
+					<input id="uploadInput" type="file" accept="image/*" class="input" />
+					<div class="row" style="margin-top:8px">
+						<select id="cropRatio" class="input">
+							<option value="1:1">1:1</option>
+							<option value="3:4">3:4</option>
+							<option value="2:3">2:3</option>
+							<option value="A">A 系列</option>
+						</select>
+						<button class="btn ghost">裁切占位</button>
+					</div>
+					<div class="thumb" style="margin-top:8px"><span class="label">预览占位</span></div>
+					<div class="row之间" style="margin-top:8px">
+						<span class="notice">支持 JPG/PNG</span>
+						<button class="btn" id="useUpload">使用图片</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 选框 -->
+			<section class="screen" id="frame">
+				<div class="card">
+					<div class="section-title">选择相框样式</div>
+					<div class="row wrap" id="styleRow"></div>
+					<div class="hr"></div>
+					<div class="section-title">选择尺寸</div>
+					<div class="row wrap" id="sizeRow"></div>
+					<div class="hr"></div>
+					<div class="section-title">卡纸 / 边框颜色</div>
+					<div class="row wrap" id="matRow"></div>
+					<div class="hr"></div>
+					<div class="row between">
+						<div>
+							<div class="label">预计价格</div>
+							<div class="price" id="priceText">¥ 0</div>
+						</div>
+						<button class="btn" data-nav="preview">去 3D 预览</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 3D 预览 -->
+			<section class="screen" id="preview">
+				<div class="card">
+					<div class="section-title">3D 预览（占位）</div>
+					<div class="preview3d">
+						<div class="cube">
+							<div class="image"><img id="previewImg" alt="preview" /></div>
+						</div>
+					</div>
+					<div class="row between" style="margin-top:10px">
+						<div class="toolbar">
+							<button class="btn ghost" id="rotateLeft"><i class="fa-solid fa-rotate-left"></i></button>
+							<button class="btn ghost" id="rotateRight"><i class="fa-solid fa-rotate-right"></i></button>
+							<button class="btn ghost"><i class="fa-regular fa-image"></i> 截图占位</button>
+							<button class="btn ghost"><i class="fa-brands fa-unity"></i> AR 占位</button>
+						</div>
+						<button class="btn" id="addToCart"><i class="fa-solid fa-cart-plus"></i> 加入购物车</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 购物车 -->
+			<section class="screen" id="cart">
+				<div class="card">
+					<div class="section-title">购物车</div>
+					<table class="table" id="cartTable">
+						<thead><tr><th>商品</th><th>数量</th><th>价格</th></tr></thead>
+						<tbody></tbody>
+					</table>
+					<div class="row between" style="margin-top:8px">
+						<div class="price" id="cartTotal">¥ 0</div>
+						<button class="btn" data-nav="checkout">去结算</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 结算 -->
+			<section class="screen" id="checkout">
+				<div class="card">
+					<div class="section-title">收货信息</div>
+					<input class="input" id="addrName" placeholder="收货人姓名" />
+					<input class="input" id="addrPhone" placeholder="手机号" style="margin-top:8px" />
+					<input class="input" id="addrDetail" placeholder="详细地址" style="margin-top:8px" />
+					<div class="hr"></div>
+					<div class="section标题">支付方式</div>
+					<select class="input" id="payMethod">
+						<option>微信支付</option>
+						<option>支付宝</option>
+					</select>
+					<div class="row between" style="margin-top:10px">
+						<span class="notice">预计到手价</span>
+						<div class="price" id="checkoutTotal">¥ 0</div>
+					</div>
+					<button class="btn full" id="placeOrder" style="margin-top:10px">支付下单</button>
+				</div>
+			</section>
+
+			<!-- 完成 -->
+			<section class="screen" id="confirm">
+				<div class="card" style="text-align:center">
+					<i class="fa-solid fa-circle-check" style="color:var(--ok); font-size:48px;"></i>
+					<div class="section-title">下单成功</div>
+					<div class="label">订单号 <span id="orderNo">-</span></div>
+					<div class="row" style="margin-top:10px; justify-content:center; gap:10px">
+						<button class="btn" data-nav="orders">查看订单</button>
+						<button class="btn ghost" data-nav="home">返回首页</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 订单 -->
+			<section class="screen" id="orders">
+				<div class="card">
+					<div class="section-title">我的订单</div>
+					<div id="ordersList" class="grid"></div>
+				</div>
+			</section>
+
+			<!-- 我的 -->
+			<section class="screen" id="profile">
+				<div class="card">
+					<div class="section-title">个人中心</div>
+					<div class="row wrap">
+						<button class="btn ghost"><i class="fa-solid fa-location-dot"></i> 地址管理</button>
+						<button class="btn ghost"><i class="fa-solid fa-wallet"></i> 支付设置</button>
+						<button class="btn ghost"><i class="fa-solid fa-headset"></i> 在线客服</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- 帮助 -->
+			<section class="screen" id="help">
+				<div class="card">
+					<div class="section-title">帮助与说明</div>
+					<ul>
+						<li class="notice">AI 生成内容仅作示意，实际上线需做合规与敏感检测。</li>
+						<li class="notice">3D 预览为占位实现，实际可接入 three.js/miniprogram-3d。</li>
+						<li class="notice">价格为模拟计算，最终以线上为准。</li>
+					</ul>
+				</div>
+			</section>
+		</div>
+
+		<!-- 底部 TabBar -->
+		<div class="tabbar">
+			<button data-nav="home" class="active"><i class="fa-solid fa-house"></i><span>首页</span></button>
+			<button data-nav="orders"><i class="fa-solid fa-receipt"></i><span>订单</span></button>
+			<button data-nav="profile"><i class="fa-solid fa-user"></i><span>我的</span></button>
+			<button data-nav="help"><i class="fa-solid fa-circle-question"></i><span>帮助</span></button>
+		</div>
+	</div>
+
+	<script>
+		const state = {
+			selectedImage: '',
+			selectedStyle: '原木',
+			selectedSize: 'A4',
+			selectedMat: '白',
+			cart: [],
+			orders: [],
+			rotation: 0,
+		};
+
+		const styles = ['原木','胡桃木','黑色金属','白色金属'];
+		const sizes = ['A5','A4','A3','30x40','40x60'];
+		const mats = ['白','黑','米色','灰'];
+
+		function $(sel){ return document.querySelector(sel); }
+		function $all(sel){ return Array.from(document.querySelectorAll(sel)); }
+		function setActiveScreen(id){
+			$all('.screen').forEach(s=>s.classList.remove('active'));
+			$('#'+id).classList.add('active');
+			$all('.tabbar button').forEach(b=>b.classList.toggle('active', b.dataset.nav===id));
+			window.scrollTo({top:0, behavior:'smooth'});
+		}
+		function navTo(id){ setActiveScreen(id); history.pushState({screen:id}, '', '#'+id); }
+		window.addEventListener('popstate', (e)=>{ const id = (e.state && e.state.screen) || 'home'; setActiveScreen(id); });
+
+		function renderOptions(){
+			const styleRow = $('#styleRow');
+			const sizeRow = $('#sizeRow');
+			const matRow = $('#matRow');
+			styleRow.innerHTML = styles.map(s=>`<span class=\"badge ${state.selectedStyle===s?'active':''}\" data-style=\"${s}\">${s}</span>`).join('');
+			sizeRow.innerHTML = sizes.map(s=>`<span class=\"badge ${state.selectedSize===s?'active':''}\" data-size=\"${s}\">${s}</span>`).join('');
+			matRow.innerHTML = mats.map(s=>`<span class=\"badge ${state.selectedMat===s?'active':''}\" data-mat=\"${s}\">${s}</span>`).join('');
+			updatePrice();
+		}
+		function updatePrice(){
+			const base = 99;
+			const sizeFactor = {A5:0, A4:20, A3:60, '30x40':80, '40x60':150}[state.selectedSize] || 0;
+			const styleFactor = styles.indexOf(state.selectedStyle) * 30;
+			const price = base + sizeFactor + styleFactor;
+			$('#priceText').textContent = '¥ ' + price;
+			return price;
+		}
+		function addRecent(img){
+			const grid = $('#recentGrid');
+			const node = document.createElement('div');
+			node.className = 'thumb';
+			node.innerHTML = `<img src=\"${img}\" alt=\"recent\" />`;
+			grid.prepend(node);
+		}
+
+		function initHome(){
+			$('#fileInput').addEventListener('change', (e)=>{
+				const file = e.target.files[0];
+				if(!file) return;
+				const url = URL.createObjectURL(file);
+				state.selectedImage = url;
+				addRecent(url);
+				navTo('frame');
+			});
+		}
+
+		function initGenerate(){
+			$all('[data-tag]').forEach(el=>{
+				el.addEventListener('click', ()=>{
+					el.classList.toggle('active');
+					const text = $('#prompt').value.trim();
+					$('#prompt').value = text + (text? ' ':'') + el.textContent;
+				});
+			});
+			$('#btnGenerate').addEventListener('click', ()=>{
+				const grid = $('#genGrid');
+				grid.innerHTML = '';
+				for(let i=0;i<9;i++){
+					const url = `https://picsum.photos/seed/${encodeURIComponent($('#prompt').value+'-'+i)}/300/300`;
+					const cell = document.createElement('div');
+					cell.className = 'thumb';
+					cell.innerHTML = `<img src=\"${url}\" alt=\"gen\" /><i class='fa-solid fa-circle-check' style='position:absolute; right:8px; top:8px; color:transparent;'></i>`;
+					cell.style.position = 'relative';
+					cell.addEventListener('click', ()=>{
+						$all('#genGrid .thumb').forEach(t=>t.style.outline='none');
+						cell.style.outline = '2px solid var(--brand)';
+						state.selectedImage = url;
+					});
+					grid.appendChild(cell);
+				}
+			});
+			$('#useGen').addEventListener('click', ()=>{ if(state.selectedImage){ addRecent(state.selectedImage); navTo('frame'); } });
+		}
+
+		function initUpload(){
+			$('#uploadInput').addEventListener('change', (e)=>{
+				const f = e.target.files[0]; if(!f) return; const url = URL.createObjectURL(f); state.selectedImage = url; });
+			$('#useUpload').addEventListener('click', ()=>{ if(state.selectedImage){ addRecent(state.selectedImage); navTo('frame'); } });
+		}
+
+		function initFrame(){
+			document.addEventListener('click', (e)=>{
+				const t = e.target;
+				if(t.matches('[data-style]')){ state.selectedStyle = t.dataset.style; renderOptions(); }
+				if(t.matches('[data-size]')){ state.selectedSize = t.dataset.size; renderOptions(); }
+				if(t.matches('[data-mat]')){ state.selectedMat = t.dataset.mat; renderOptions(); }
+			});
+		}
+
+		function initPreview(){
+			$('#rotateLeft').addEventListener('click', ()=>{ state.rotation -= 15; updateRotation(); });
+			$('#rotateRight').addEventListener('click', ()=>{ state.rotation += 15; updateRotation(); });
+			$('#addToCart').addEventListener('click', ()=>{
+				const price = updatePrice();
+				const item = { id: Date.now(), img: state.selectedImage, style: state.selectedStyle, size: state.selectedSize, mat: state.selectedMat, price, qty: 1 };
+				state.cart.push(item);
+				renderCart();
+				navTo('cart');
+			});
+		}
+		function updateRotation(){ $('.cube').style.transform = `perspective(500px) rotateX(18deg) rotateY(${state.rotation}deg)`; }
+
+		function renderCart(){
+			const tbody = $('#cartTable tbody');
+			tbody.innerHTML = '';
+			let total = 0;
+			state.cart.forEach(item=>{
+				total += item.price * item.qty;
+				const tr = document.createElement('tr');
+				tr.innerHTML = `<td><div class='row'><div style='width:48px;height:48px;border-radius:6px;overflow:hidden;border:1px solid var(--line)'><img src='${item.img}' style='width:100%;height:100%;object-fit:cover'/></div><div><div>${item.style} · ${item.size}</div><div class='label'>卡纸：${item.mat}</div></div></div></td><td><div class='row'><button class='btn ghost' data-dec='${item.id}'>-</button><span class='kbd'>${item.qty}</span><button class='btn ghost' data-inc='${item.id}'>+</button></div></td><td>¥ ${item.price}</td>`;
+				tbody.appendChild(tr);
+			});
+			$('#cartTotal').textContent = '¥ ' + total;
+			$('#checkoutTotal').textContent = '¥ ' + total;
+		}
+
+		function initCart(){
+			document.addEventListener('click', (e)=>{
+				const t = e.target;
+				if(t.matches('[data-inc]')){ const id = +t.dataset.inc; const item = state.cart.find(x=>x.id===id); if(item){ item.qty++; renderCart(); } }
+				if(t.matches('[data-dec]')){ const id = +t.dataset.dec; const item = state.cart.find(x=>x.id===id); if(item && item.qty>1){ item.qty--; renderCart(); } }
+			});
+		}
+
+		function initCheckout(){
+			$('#placeOrder').addEventListener('click', ()=>{
+				if(state.cart.length===0) return;
+				const order = { id: 'OD'+Math.floor(Math.random()*1e6), items: JSON.parse(JSON.stringify(state.cart)), total: $('#checkoutTotal').textContent, time: new Date().toLocaleString() };
+				state.orders.unshift(order);
+				state.cart = [];
+				renderCart();
+				$('#orderNo').textContent = order.id;
+				renderOrders();
+				navTo('confirm');
+			});
+		}
+
+		function renderOrders(){
+			const list = $('#ordersList');
+			list.innerHTML = state.orders.map(o=>`<div class='card'><div class='row between'><div>订单号 ${o.id}</div><div class='label'>${o.time}</div></div><div class='row between' style='margin-top:8px'><div class='label'>${o.items.length} 件商品</div><div class='price'>${o.total}</div></div><div class='row' style='margin-top:8px'><button class='btn ghost' data-rebuy='${o.id}'>再次购买</button></div></div>`).join('');
+			$all('[data-rebuy]').forEach(btn=>btn.addEventListener('click', ()=>{ const order = state.orders.find(x=>x.id===btn.dataset.rebuy); if(order){ state.cart = JSON.parse(JSON.stringify(order.items)); renderCart(); navTo('cart'); } }));
+		}
+
+		function wireNav(){
+			$all('[data-nav]').forEach(b=> b.addEventListener('click', ()=> navTo(b.dataset.nav)) );
+			$('#backBtn').addEventListener('click', ()=> history.back());
+		}
+
+		function hydrate(){
+			renderOptions();
+			renderCart();
+			renderOrders();
+			$('#previewImg').src = state.selectedImage || 'https://picsum.photos/seed/preview/400/300';
+		}
+
+		function init(){
+			wireNav();
+			initHome();
+			initGenerate();
+			initUpload();
+			initFrame();
+			initPreview();
+			initCart();
+			initCheckout();
+			hydrate();
+		}
+		document.addEventListener('DOMContentLoaded', init);
+	</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!-- 订单确认页面 -->
+<view class="page">
+  <!-- 商品信息 -->
+  <view class="product-section">
+    <view class="product-card">
+      <view class="product-preview">
+        <image wx:if="{{orderData.image}}" class="product-image" src="{{orderData.image}}" mode="aspectFit"></image>
+        <view wx:elif="{{orderData.aiGeneratedColor}}" class="product-ai" style="background: {{orderData.aiGeneratedColor}}">
+          <text class="ai-text">AI生成图片</text>
+        </view>
+        <view wx:else class="product-placeholder">
+          <text class="placeholder-icon">📷</text>
+        </view>
+      </view>
+      <view class="product-info">
+        <text class="product-title">定制相框</text>
+        <text class="product-desc">{{orderData.styleName}} · {{orderData.sizeName}} · {{orderData.matName}}</text>
+        <text class="product-price">¥{{orderData.price}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收货地址 -->
+  <view class="address-section">
+    <view class="section-title">收货地址</view>
+    <view class="address-card" bindtap="selectAddress">
+      <view wx:if="{{address}}" class="address-info">
+        <view class="address-header">
+          <text class="contact-name">{{address.name}}</text>
+          <text class="contact-phone">{{address.phone}}</text>
+        </view>
+        <text class="address-detail">{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</text>
+      </view>
+      <view wx:else class="address-placeholder">
+        <text class="placeholder-icon">📍</text>
+        <text class="placeholder-text">请选择收货地址</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <!-- 配送方式 -->
+  <view class="delivery-section">
+    <view class="section-title">配送方式</view>
+    <view class="delivery-card">
+      <view class="delivery-item">
+        <text class="delivery-name">标准配送</text>
+        <text class="delivery-desc">3-5个工作日送达</text>
+      </view>
+      <text class="delivery-fee">免费</text>
+    </view>
+  </view>
+
+  <!-- 支付方式 -->
+  <view class="payment-section">
+    <view class="section-title">支付方式</view>
+    <view class="payment-card">
+      <view class="payment-item" bindtap="selectPayment" data-type="wechat">
+        <view class="payment-info">
+          <text class="payment-icon">💳</text>
+          <text class="payment-name">微信支付</text>
+        </view>
+        <view class="payment-radio {{paymentType === 'wechat' ? 'selected' : ''}}"></view>
+      </view>
+      <view class="payment-item" bindtap="selectPayment" data-type="alipay">
+        <view class="payment-info">
+          <text class="payment-icon">💰</text>
+          <text class="payment-name">支付宝</text>
+        </view>
+        <view class="payment-radio {{paymentType === 'alipay' ? 'selected' : ''}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单金额 -->
+  <view class="amount-section">
+    <view class="amount-item">
+      <text class="amount-label">商品金额</text>
+      <text class="amount-value">¥{{orderData.price}}</text>
+    </view>
+    <view class="amount-item">
+      <text class="amount-label">运费</text>
+      <text class="amount-value">免费</text>
+    </view>
+    <view class="amount-divider"></view>
+    <view class="amount-item total">
+      <text class="amount-label">实付金额</text>
+      <text class="amount-value">¥{{orderData.price}}</text>
+    </view>
+  </view>
+
+  <!-- 底部支付按钮 -->
+  <view class="bottom-bar">
+    <view class="total-info">
+      <text class="total-label">实付金额：</text>
+      <text class="total-price">¥{{orderData.price}}</text>
+    </view>
+    <button class="pay-btn" bindtap="submitOrder" disabled="{{!address || !paymentType}}">
+      立即支付
+    </button>
+  </view>
+</view>
