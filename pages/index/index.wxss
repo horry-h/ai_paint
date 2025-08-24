@@ -1,8 +1,8 @@
-/** 首页 - 专业UI设计样式 */
+/** 首页 - 微信风格卡片设计 */
 page {
-  background: linear-gradient(135deg, #0b0c10 0%, #1a1d2a 100%);
-  color: #e7ecf3;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f7f7f7;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .page {
@@ -19,6 +19,7 @@ page {
   justify-content: center;
   overflow: hidden;
   margin-bottom: 40rpx;
+  background: linear-gradient(135deg, #07c160 0%, #10ad6a 100%);
 }
 
 .hero-bg {
@@ -27,8 +28,8 @@ page {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #4f8cff 0%, #7c3aed 50%, #ec4899 100%);
-  opacity: 0.1;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
   z-index: 1;
 }
 
@@ -44,16 +45,14 @@ page {
   font-size: 48rpx;
   font-weight: 700;
   margin-bottom: 16rpx;
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
+  letter-spacing: 1rpx;
 }
 
 .hero-subtitle {
   display: block;
   font-size: 28rpx;
-  color: #8891a4;
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.5;
 }
 
@@ -64,24 +63,29 @@ page {
 }
 
 .action-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #f0f0f0;
   border-radius: 24rpx;
   padding: 40rpx 32rpx;
   margin-bottom: 24rpx;
-  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 
 .action-card:active {
   transform: scale(0.98);
-  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.12);
 }
 
 .action-card.primary {
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  background: linear-gradient(135deg, #07c160, #10ad6a);
   border-color: transparent;
-  box-shadow: 0 8rpx 32rpx rgba(79, 140, 255, 0.3);
+  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.3);
+}
+
+.action-card.primary .action-title,
+.action-card.primary .action-desc {
+  color: #ffffff;
 }
 
 .action-icon {
@@ -95,13 +99,13 @@ page {
   font-size: 32rpx;
   font-weight: 600;
   margin-bottom: 8rpx;
-  color: #e7ecf3;
+  color: #333333;
 }
 
 .action-desc {
   display: block;
   font-size: 24rpx;
-  color: #8891a4;
+  color: #666666;
   line-height: 1.4;
 }
 
@@ -121,15 +125,15 @@ page {
 .section-title {
   font-size: 36rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
 }
 
 .section-more {
   font-size: 28rpx;
-  color: #4f8cff;
+  color: #07c160;
   padding: 8rpx 16rpx;
   border-radius: 20rpx;
-  background: rgba(79, 140, 255, 0.1);
+  background: rgba(7, 193, 96, 0.1);
 }
 
 .recent-scroll {
@@ -149,7 +153,9 @@ page {
   border-radius: 20rpx;
   overflow: hidden;
   flex-shrink: 0;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2rpx solid #f0f0f0;
+  background: #ffffff;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
 }
 
 .recent-item image {
@@ -163,7 +169,7 @@ page {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
   padding: 20rpx 16rpx 16rpx;
 }
 
@@ -179,9 +185,10 @@ page {
   justify-content: center;
   width: 400rpx;
   height: 200rpx;
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
   border-radius: 20rpx;
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2rpx dashed #e0e0e0;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .empty-icon {
@@ -192,13 +199,13 @@ page {
 
 .empty-text {
   font-size: 28rpx;
-  color: #8891a4;
+  color: #333333;
   margin-bottom: 8rpx;
 }
 
 .empty-desc {
   font-size: 24rpx;
-  color: #6b7280;
+  color: #999999;
   text-align: center;
 }
 
@@ -214,16 +221,17 @@ page {
 }
 
 .featured-item {
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
   border-radius: 20rpx;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1rpx solid #f0f0f0;
   transition: all 0.3s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .featured-item:active {
   transform: scale(0.98);
-  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
 }
 
 .featured-preview {
@@ -234,17 +242,17 @@ page {
   justify-content: center;
   border-radius: 16rpx 16rpx 0 0;
   position: relative;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
 }
 
 .featured-text {
-  color: #ffffff;
+  color: #333333;
   font-size: 28rpx;
   font-weight: 600;
-  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
 }
 
 .featured-item:nth-child(3) .featured-text {
-  color: #000000;
+  color: #333333;
 }
 
 .featured-info {
@@ -255,13 +263,13 @@ page {
   display: block;
   font-size: 28rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 8rpx;
 }
 
 .featured-price {
   display: block;
   font-size: 24rpx;
-  color: #4f8cff;
+  color: #ff6b35;
   font-weight: 600;
 }

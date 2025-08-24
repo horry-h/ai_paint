@@ -11,10 +11,10 @@
     "pages/profile/profile"
   ],
   "window": {
-    "navigationBarTextStyle": "white",
+    "navigationBarTextStyle": "black",
     "navigationBarTitleText": "定制相框",
-    "navigationBarBackgroundColor": "#0b0c10",
-    "backgroundColor": "#0b0c10"
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f7f7f7"
   },
   "libVersion": "3.0.0",
   "sitemapLocation": "sitemap.json"

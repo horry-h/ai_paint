@@ -145,6 +145,7 @@ if (THREE && THREE.global) {
   }
 }
 
+// 3D预览页面
 Page({
   data: {
     image: '',
@@ -155,9 +156,10 @@ Page({
     price: 0,
     rotationY: 0,
     rotationX: 0,
+    scale: 1, // 新增：缩放比例
     isLoading: true,
     loadError: false,
-    modelLoaded: false, // 新增：标记模型是否成功加载
+    modelLoaded: false,
     autoRotate: false,
     webglSupported: true,
     showTouchHint: true,
@@ -174,6 +176,11 @@ Page({
   lastTouchX: 0,
   lastTouchY: 0,
   lastTapTime: 0,
+  
+  // 新增：缩放相关变量
+  initialDistance: 0,
+  initialScale: 1,
+  isScaling: false,
 
   // 场景相关变量
   scene: null,
@@ -196,6 +203,7 @@ Page({
       brand: systemInfo.brand,
       model: systemInfo.model
     });
+
     // 获取传入的参数
     if (options.image) {
       this.setData({
@@ -228,8 +236,10 @@ Page({
       });
     }
 
-    // 初始化Three.js
-    this.initThreeJS();
+    // 延迟初始化，确保页面完全加载
+    setTimeout(() => {
+      this.initThreeJS();
+    }, 500);
   },
 
   onShow() {
@@ -257,16 +267,34 @@ Page({
     });
   },
 
+  onUnload() {
+    // 清理资源
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+    if (this.renderer) {
+      this.renderer.dispose();
+    }
+    if (this.scene) {
+      this.scene.clear();
+    }
+  },
+
   // 初始化Three.js
   initThreeJS() {
     try {
       // 检查THREE对象是否正确加载
       if (!THREE || !THREE.global) {
         console.error('THREE对象未正确加载:', THREE);
+        console.log('将使用备用模型方案');
+        
+        // 直接创建备用模型，不显示错误
+        this.createFallbackModel();
         this.setData({ 
           webglSupported: false,
           isLoading: false,
-          loadError: true 
+          modelLoaded: true,
+          loadError: false
         });
         return;
       }
@@ -329,7 +357,7 @@ Page({
 
     // 创建场景
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x1a1a2e);
+    this.scene.background = new THREE.Color(0xffffff); // 白色背景
 
     // 创建渲染器
     this.renderer = new THREE.WebGLRenderer({ 
@@ -352,105 +380,71 @@ Page({
 
   // 加载3D模型
   load3DModel() {
-    // 防止重复加载
     if (this.isModelLoading) {
       console.log('模型正在加载中，跳过重复请求');
       return;
     }
-    
+
     this.isModelLoading = true;
-    const modelUrl = 'https://aipaint-1251760642.cos.ap-guangzhou.myqcloud.com/test.obj';
-    
-    console.log('开始加载3D模型:', modelUrl);
-    
+    console.log('开始加载3D模型');
+
     // 清理之前的模型
     this.clearModel();
-    
-    // 检查网络连接
-    wx.getNetworkType({
-      success: (res) => {
-        console.log('网络类型:', res.networkType);
-        if (res.networkType === 'none') {
-          console.error('网络连接不可用');
-          this.setData({ 
-            isLoading: false,
-            loadError: true 
-          });
-          return;
-        }
-      }
-    });
-    
-    // 使用OBJLoader加载模型
+
+    // 创建OBJ加载器
     const loader = new THREE.OBJLoader();
     
+    // 加载模型
     loader.load(
-      modelUrl,
+      'https://aipaint-1251760642.cos.ap-guangzhou.myqcloud.com/test.obj',
       (object) => {
         console.log('3D模型加载成功:', object);
         
-        // 清理之前的模型
-        this.clearModel();
+        // 调整模型大小和位置
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = 2 / maxDim;
+        object.scale.setScalar(scale);
         
-        // 模型加载成功
-        this.model = object;
+        // 居中模型
+        const center = box.getCenter(new THREE.Vector3());
+        object.position.sub(center.multiplyScalar(scale));
         
-        // 设置材质
-        this.model.traverse((child) => {
+        // 添加材质
+        object.traverse((child) => {
           if (child.isMesh) {
-            child.material = new THREE.MeshBasicMaterial({
-              color: new THREE.Color(0x8B4513), // 木色
-              side: THREE.DoubleSide
+            child.material = new THREE.MeshPhongMaterial({ 
+              color: 0x8B4513,
+              shininess: 30
             });
           }
         });
-
-        // 添加到场景
-        this.scene.add(this.model);
         
-        // 更新状态
-        this.setData({ 
+        this.model = object;
+        this.scene.add(object);
+        
+        this.setData({
           isLoading: false,
-          modelLoaded: true, // 标记模型已成功加载
-          loadError: false,  // 确保错误状态为false
-          showTouchHint: true
+          modelLoaded: true,
+          loadError: false
         });
         
-        this.isModelLoading = false; // 重置加载标志
-        console.log('模型状态更新完成，loadError:', false);
+        this.isModelLoading = false;
       },
       (progress) => {
-        // 加载进度
         console.log('加载进度:', progress);
       },
       (error) => {
-        // 加载失败
-        console.error('模型加载失败:', error);
-        console.error('错误详情:', {
-          message: error.message,
-          stack: error.stack,
-          type: error.type
+        console.error('3D模型加载失败:', error);
+        this.setData({
+          isLoading: false,
+          loadError: true 
         });
+        console.log('模型加载失败，设置loadError为true');
         
-        // 尝试备用方案：创建一个简单的立方体
-        const fallbackSuccess = this.createFallbackModel();
-        
-        if (fallbackSuccess) {
-          // 备用方案成功，不显示错误
-          this.setData({ 
-            isLoading: false,
-            modelLoaded: true,
-            loadError: false
-          });
-          console.log('备用模型创建成功，loadError保持为false');
-        } else {
-          // 备用方案也失败，才显示错误
-          this.setData({ 
-            isLoading: false,
-            loadError: true 
-          });
-          console.log('模型加载失败，设置loadError为true');
-        }
+        // 创建备用模型
+        this.createFallbackModel();
         
         this.isModelLoading = false; // 重置加载标志
       }
@@ -489,6 +483,19 @@ Page({
   createFallbackModel() {
     console.log('创建备用模型');
     try {
+      // 检查THREE是否可用
+      if (!THREE) {
+        console.log('THREE不可用，创建简单的2D备用显示');
+        // 设置状态，显示2D备用内容
+        this.setData({
+          webglSupported: false,
+          isLoading: false,
+          modelLoaded: true,
+          loadError: false
+        });
+        return true;
+      }
+      
       // 清理之前的模型
       this.clearModel();
       
@@ -501,7 +508,9 @@ Page({
       this.model = new THREE.Mesh(geometry, material);
       
       // 添加到场景
-      this.scene.add(this.model);
+      if (this.scene) {
+        this.scene.add(this.model);
+      }
       
       console.log('备用模型创建成功');
       return true; // 返回成功标志
@@ -528,30 +537,74 @@ Page({
     this.load3DModel();
   },
 
+  // Canvas触摸事件处理
+  touchStart(e) {
+    console.log('canvas touchstart', e);
+    this.documentTouchStart(e);
+    this.setData({ showTouchHint: false });
+  },
+
+  touchMove(e) {
+    console.log('canvas touchmove', e);
+    this.documentTouchMove(e);
+  },
+
+  touchEnd(e) {
+    console.log('canvas touchend', e);
+    this.documentTouchEnd(e);
+  },
+
+  touchCancel(e) {
+    console.log('canvas touchcancel', e);
+    this.documentTouchEnd(e);
+  },
+
+  longTap(e) {
+    console.log('canvas longtap', e);
+  },
+
+  tap(e) {
+    console.log('canvas tap', e);
+    this.documentTouchEnd(e);
+  },
+
   // 动画循环
   animate() {
     this.animationId = this.renderer.domElement.requestAnimationFrame(() => {
       this.animate();
     });
 
-    // 更新模型旋转
+    // 更新模型旋转和缩放
     if (this.model) {
       // 使用弧度制，确保旋转流畅
       this.model.rotation.y = this.data.rotationY * Math.PI / 180;
       this.model.rotation.x = this.data.rotationX * Math.PI / 180;
       
+      // 应用缩放
+      this.model.scale.setScalar(this.data.scale);
+      
       // 限制X轴旋转范围，避免模型翻转
       if (this.model.rotation.x > Math.PI / 2) {
         this.model.rotation.x = Math.PI / 2;
+        // 同步更新data中的值，保持状态一致
+        this.setData({
+          rotationX: 90
+        });
       } else if (this.model.rotation.x < -Math.PI / 2) {
         this.model.rotation.x = -Math.PI / 2;
+        // 同步更新data中的值，保持状态一致
+        this.setData({
+          rotationX: -90
+        });
       }
     }
 
-    // 自动旋转
-    if (this.data.autoRotate) {
+    // 自动旋转（仅在开启时执行）
+    if (this.data.autoRotate && this.model) {
+      this.model.rotation.y += 0.01;
+      // 更新data中的rotationY，保持状态同步
       this.setData({
-        rotationY: this.data.rotationY + 1
+        rotationY: this.model.rotation.y * 180 / Math.PI
       });
     }
 
@@ -561,120 +614,75 @@ Page({
     }
   },
 
-  // 自定义触摸事件处理 - 外层容器
+  // 触摸事件处理
   documentTouchStart(e) {
-    this.handleTouchStart(e);
+    const touches = e.touches;
+    
+    if (touches.length === 1) {
+      // 单指触摸 - 旋转
+      this.isTouching = true;
+      this.isScaling = false;
+      this.touchStartX = touches[0].clientX;
+      this.touchStartY = touches[0].clientY;
+      this.lastTouchX = touches[0].clientX;
+      this.lastTouchY = touches[0].clientY;
+    } else if (touches.length === 2) {
+      // 双指触摸 - 缩放
+      this.isScaling = true;
+      this.isTouching = false;
+      this.initialDistance = this.getDistance(touches[0], touches[1]);
+      this.initialScale = this.data.scale;
+    }
   },
 
   documentTouchMove(e) {
-    this.handleTouchMove(e);
-  },
-
-  documentTouchEnd(e) {
-    this.handleTouchEnd(e);
-  },
-
-  // 自定义触摸事件处理 - canvas
-  touchStart(e) {
-    console.log('canvas touchstart', e);
-    this.handleTouchStart(e);
-    this.setData({ showTouchHint: false });
-  },
-
-  touchMove(e) {
-    console.log('canvas touchmove', e);
-    this.handleTouchMove(e);
-  },
-
-  touchEnd(e) {
-    console.log('canvas touchend', e);
-    this.handleTouchEnd(e);
-  },
-
-  touchCancel(e) {
-    console.log('canvas touchcancel', e);
-    this.handleTouchEnd(e);
-  },
-
-  longTap(e) {
-    console.log('canvas longtap', e);
-  },
-
-  tap(e) {
-    console.log('canvas tap', e);
+    const touches = e.touches;
     
-    // 检测双击
-    const now = Date.now();
-    if (now - this.lastTapTime < 300) {
-      // 双击重置视角
-      this.resetRotation();
-      console.log('双击重置视角');
-    }
-    this.lastTapTime = now;
-  },
-
-  // 自定义触摸处理方法
-  handleTouchStart(e) {
-    if (e.touches && e.touches.length > 0) {
-      const touch = e.touches[0];
-      this.touchStartX = touch.clientX;
-      this.touchStartY = touch.clientY;
-      this.lastTouchX = touch.clientX;
-      this.lastTouchY = touch.clientY;
-      this.isTouching = true;
+    if (touches.length === 1 && this.isTouching) {
+      // 单指移动 - 旋转
+      const deltaX = touches[0].clientX - this.lastTouchX;
+      const deltaY = touches[0].clientY - this.lastTouchY;
       
-      console.log('触摸开始:', {
-        x: this.touchStartX,
-        y: this.touchStartY
+      this.setData({
+        rotationY: this.data.rotationY + deltaX * 0.5,
+        rotationX: this.data.rotationX + deltaY * 0.5
+      });
+      
+      this.lastTouchX = touches[0].clientX;
+      this.lastTouchY = touches[0].clientY;
+    } else if (touches.length === 2 && this.isScaling) {
+      // 双指移动 - 缩放
+      const currentDistance = this.getDistance(touches[0], touches[1]);
+      const scaleFactor = currentDistance / this.initialDistance;
+      const newScale = Math.max(0.5, Math.min(3.0, this.initialScale * scaleFactor));
+      
+      this.setData({
+        scale: newScale
       });
     }
   },
 
-  handleTouchMove(e) {
-    if (!this.isTouching || !e.touches || e.touches.length === 0) {
-      return;
-    }
-
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - this.lastTouchX;
-    const deltaY = touch.clientY - this.lastTouchY;
-
-    // 防止页面滚动
-    e.preventDefault && e.preventDefault();
-
-    // 计算旋转角度（灵敏度可调）
-    const sensitivity = 0.8; // 增加灵敏度
-    const newRotationY = this.data.rotationY + deltaX * sensitivity;
-    const newRotationX = this.data.rotationX - deltaY * sensitivity; // 注意Y轴方向
-
-    // 限制X轴旋转范围
-    const maxRotationX = 80;
-    const clampedRotationX = Math.max(-maxRotationX, Math.min(maxRotationX, newRotationX));
-
-    // 更新旋转角度
-    this.setData({
-      rotationY: newRotationY,
-      rotationX: clampedRotationX
-    });
-
-    // 更新最后触摸位置
-    this.lastTouchX = touch.clientX;
-    this.lastTouchY = touch.clientY;
-
-    console.log('触摸移动:', {
-      deltaX: deltaX,
-      deltaY: deltaY,
-      rotationY: newRotationY,
-      rotationX: clampedRotationX
-    });
-  },
-
-  handleTouchEnd(e) {
+  documentTouchEnd(e) {
     this.isTouching = false;
-    console.log('触摸结束');
+    this.isScaling = false;
+    
+    // 检查是否为双击
+    const now = Date.now();
+    if (now - this.lastTapTime < 300) {
+      // 双击重置所有变换
+      // this.resetAll();
+    }
+    this.lastTapTime = now;
   },
 
-  // 控制按钮
+  // 计算两点距离
+  getDistance(touch1, touch2) {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  },
+
+  // 按钮控制
   rotateLeft() {
     this.setData({
       rotationY: this.data.rotationY - 30
@@ -694,58 +702,47 @@ Page({
     });
   },
 
+  // 缩放控制
+  zoomIn() {
+    const newScale = Math.min(3.0, this.data.scale + 0.2);
+    this.setData({
+      scale: newScale
+    });
+  },
+
+  zoomOut() {
+    const newScale = Math.max(0.5, this.data.scale - 0.2);
+    this.setData({
+      scale: newScale
+    });
+  },
+
+  resetScale() {
+    this.setData({
+      scale: 1
+    });
+  },
+
+  // 重置所有变换（旋转和缩放）
+  resetAll() {
+    this.setData({
+      rotationY: 0,
+      rotationX: 0,
+      scale: 1
+    });
+  },
+
   toggleAutoRotate() {
     this.setData({
       autoRotate: !this.data.autoRotate
     });
   },
 
-  // 重试加载
-  retryLoad() {
-    this.setData({ 
-      loadError: false,
-      isLoading: true 
-    });
-    this.load3DModel();
-  },
-
-  // 返回上一页
+  // 页面导航
   goBack() {
     wx.navigateBack();
   },
 
-  // 页面卸载时的清理
-  onUnload() {
-    console.log('页面卸载，开始清理资源');
-    
-    // 停止动画循环
-    if (this.animationId) {
-      this.renderer.domElement.cancelAnimationFrame(this.animationId);
-      this.animationId = null;
-    }
-    
-    // 清理模型
-    this.clearModel();
-    
-    // 清理渲染器
-    if (this.renderer) {
-      this.renderer.dispose();
-      this.renderer = null;
-    }
-    
-    // 清理场景
-    if (this.scene) {
-      this.scene.clear();
-      this.scene = null;
-    }
-    
-    // 清理相机
-    this.camera = null;
-    
-    console.log('资源清理完成');
-  },
-
-  // 立即购买
   buyNow() {
     // 构建订单数据
     const orderData = {
@@ -754,33 +751,14 @@ Page({
       styleName: this.data.styleName,
       sizeName: this.data.sizeName,
       matName: this.data.matName,
-      price: this.data.price
+      price: this.data.price,
+      timestamp: Date.now()
     };
-    
-    // 跳转到订单页面
+
+    // 跳转到结算页面
     wx.navigateTo({
       url: `/pages/checkout/checkout?orderData=${encodeURIComponent(JSON.stringify(orderData))}`
     });
-  },
-
-  onUnload() {
-    // 清理资源
-    if (this.animationId) {
-      this.renderer.domElement.cancelAnimationFrame(this.animationId);
-    }
-    
-    if (this.renderer) {
-      this.renderer.dispose();
-    }
-    
-    if (this.scene) {
-      this.scene.clear();
-    }
-    
-    // 注销canvas
-    if (this.data.canvasId) {
-      THREE.global.unregisterCanvas(this.data.canvasId);
-    }
   }
 });
 

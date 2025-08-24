@@ -1,8 +1,8 @@
-/** AI生成页面样式 */
+/** AI生成页面 - 微信风格卡片设计 */
 page {
-  background: linear-gradient(135deg, #0b0c10 0%, #1a1d2a 100%);
-  color: #e7ecf3;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f7f7f7;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .page {
@@ -16,39 +16,43 @@ page {
 }
 
 .input-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #f0f0f0;
   border-radius: 24rpx;
   padding: 32rpx;
-  margin-bottom: 32rpx;
-  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
 }
 
 .section-title {
   display: block;
   font-size: 32rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 24rpx;
 }
 
 .prompt-input {
   width: 100%;
   min-height: 120rpx;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #fafafa;
+  border: 1rpx solid #e0e0e0;
   border-radius: 16rpx;
   padding: 24rpx;
-  color: #e7ecf3;
+  color: #333333;
   font-size: 28rpx;
   line-height: 1.5;
   box-sizing: border-box;
 }
 
+.prompt-input:focus {
+  border-color: #07c160;
+  background: #ffffff;
+}
+
 .char-count {
   text-align: right;
   font-size: 24rpx;
-  color: #8891a4;
+  color: #666666;
   margin-top: 16rpx;
 }
 
@@ -65,27 +69,27 @@ page {
 
 .tag {
   padding: 16rpx 24rpx;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #fafafa;
+  border: 1rpx solid #e0e0e0;
   border-radius: 20rpx;
-  color: #8891a4;
+  color: #666666;
   font-size: 26rpx;
   transition: all 0.3s ease;
 }
 
 .tag.active {
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  background: linear-gradient(135deg, #07c160, #10ad6a);
   border-color: transparent;
   color: #ffffff;
 }
 
 /* 选项区域 */
 .options-section {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #f0f0f0;
   border-radius: 24rpx;
   padding: 32rpx;
-  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
 }
 
 .option-row {
@@ -97,7 +101,7 @@ page {
 
 .option-label {
   font-size: 28rpx;
-  color: #e7ecf3;
+  color: #333333;
 }
 
 .picker-btn {
@@ -105,28 +109,28 @@ page {
   align-items: center;
   gap: 12rpx;
   padding: 16rpx 24rpx;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #fafafa;
+  border: 1rpx solid #e0e0e0;
   border-radius: 16rpx;
-  color: #e7ecf3;
+  color: #333333;
   font-size: 26rpx;
 }
 
 .picker-arrow {
   font-size: 20rpx;
-  color: #8891a4;
+  color: #666666;
 }
 
 .generate-btn {
   width: 100%;
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  background: linear-gradient(135deg, #07c160, #10ad6a);
   border: none;
   border-radius: 16rpx;
   padding: 24rpx;
   color: #ffffff;
   font-size: 30rpx;
   font-weight: 600;
-  box-shadow: 0 8rpx 32rpx rgba(79, 140, 255, 0.3);
+  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.3);
   transition: all 0.3s ease;
 }
 
@@ -136,7 +140,7 @@ page {
 
 .generate-btn[disabled] {
   opacity: 0.6;
-  background: #6b7280;
+  background: #cccccc;
 }
 
 /* 结果区域 */
@@ -153,7 +157,7 @@ page {
 
 .results-count {
   font-size: 24rpx;
-  color: #8891a4;
+  color: #666666;
 }
 
 .results-grid {
@@ -167,13 +171,15 @@ page {
   position: relative;
   border-radius: 16rpx;
   overflow: hidden;
-  border: 2px solid transparent;
+  border: 2rpx solid transparent;
   transition: all 0.3s ease;
+  background: #ffffff;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .result-item.selected {
-  border-color: #4f8cff;
-  box-shadow: 0 0 20rpx rgba(79, 140, 255, 0.3);
+  border-color: #07c160;
+  box-shadow: 0 0 20rpx rgba(7, 193, 96, 0.3);
 }
 
 .result-preview {
@@ -183,13 +189,13 @@ page {
   align-items: center;
   justify-content: center;
   border-radius: 16rpx;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
 }
 
 .result-text {
-  color: #ffffff;
+  color: #333333;
   font-size: 26rpx;
   font-weight: 600;
-  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
 }
 
 .select-overlay {
@@ -209,7 +215,7 @@ page {
 
 .result-item.selected .select-overlay {
   opacity: 1;
-  background: #4f8cff;
+  background: #07c160;
 }
 
 .select-icon {
@@ -220,33 +226,36 @@ page {
 
 .action-bar {
   display: flex;
-  gap: 20rpx;
+  gap: 24rpx;
 }
 
 .btn-secondary {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #e0e0e0;
   border-radius: 16rpx;
   padding: 24rpx;
-  color: #e7ecf3;
+  color: #333333;
   font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
 }
 
 .btn-primary {
   flex: 1;
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  background: linear-gradient(135deg, #07c160, #10ad6a);
   border: none;
   border-radius: 16rpx;
   padding: 24rpx;
   color: #ffffff;
   font-size: 28rpx;
   font-weight: 600;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.2);
 }
 
 .btn-primary[disabled] {
   opacity: 0.6;
-  background: #6b7280;
+  background: #cccccc;
 }
 
 /* 空状态 */
@@ -269,13 +278,13 @@ page {
   display: block;
   font-size: 36rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 16rpx;
 }
 
 .empty-desc {
   display: block;
   font-size: 28rpx;
-  color: #8891a4;
+  color: #666666;
   line-height: 1.5;
 }

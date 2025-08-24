@@ -3,6 +3,9 @@
   "projectname": "%E7%9B%B8%E6%A1%86%E8%B4%AD%E4%B9%B0",
   "setting": {
     "compileHotReLoad": true,
-    "urlCheck": false
-  }
+    "urlCheck": false,
+    "bigPackageSizeSupport": true,
+    "preloadBackgroundData": true
+  },
+  "libVersion": "3.8.12"
 }

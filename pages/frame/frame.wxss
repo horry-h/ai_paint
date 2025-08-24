@@ -1,8 +1,8 @@
-/** 选框页面样式 */
+/** 相框选择页面 - 微信风格卡片设计 */
 page {
-  background: linear-gradient(135deg, #0b0c10 0%, #1a1d2a 100%);
-  color: #e7ecf3;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f7f7f7;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .page {
@@ -17,11 +17,11 @@ page {
 }
 
 .preview-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #f0f0f0;
   border-radius: 24rpx;
   padding: 32rpx;
-  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
   position: relative;
 }
 
@@ -29,19 +29,20 @@ page {
   width: 100%;
   height: 400rpx;
   border-radius: 16rpx;
-  background: rgba(255, 255, 255, 0.05);
+  background: #fafafa;
+  object-fit: cover;
 }
 
 .preview-placeholder {
   width: 100%;
   height: 400rpx;
   border-radius: 16rpx;
-  background: rgba(255, 255, 255, 0.05);
+  background: #fafafa;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2rpx dashed rgba(255, 255, 255, 0.2);
+  border: 2rpx dashed #e0e0e0;
 }
 
 .preview-ai {
@@ -52,24 +53,24 @@ page {
   align-items: center;
   justify-content: center;
   position: relative;
+  background: linear-gradient(45deg, #07c160, #10ad6a);
 }
 
 .ai-text {
-  color: #ffffff;
+  color: white;
   font-size: 32rpx;
-  font-weight: 600;
-  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
 
 .placeholder-icon {
-  font-size: 80rpx;
+  font-size: 40rpx;
+  color: #666666;
   margin-bottom: 16rpx;
-  opacity: 0.5;
 }
 
 .placeholder-text {
   font-size: 28rpx;
-  color: #8891a4;
+  color: #666666;
 }
 
 .preview-overlay {
@@ -96,7 +97,7 @@ page {
   display: block;
   font-size: 32rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 24rpx;
 }
 
@@ -112,17 +113,18 @@ page {
 
 .style-item {
   width: 200rpx;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
+  background: #ffffff;
+  border: 2rpx solid transparent;
   border-radius: 16rpx;
   overflow: hidden;
   flex-shrink: 0;
   transition: all 0.3s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .style-item.active {
-  border-color: #4f8cff;
-  box-shadow: 0 0 20rpx rgba(79, 140, 255, 0.3);
+  border-color: #07c160;
+  box-shadow: 0 0 20rpx rgba(7, 193, 96, 0.3);
 }
 
 .style-preview {
@@ -132,23 +134,23 @@ page {
   align-items: center;
   justify-content: center;
   border-radius: 16rpx 16rpx 0 0;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
 }
 
 .style-text {
-  color: #ffffff;
+  color: #333333;
   font-size: 24rpx;
   font-weight: 600;
-  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
 }
 
 .style-item:nth-child(3) .style-text {
-  color: #000000;
+  color: #333333;
 }
 
 .style-name {
   display: block;
   font-size: 26rpx;
-  color: #e7ecf3;
+  color: #333333;
   padding: 16rpx;
   text-align: center;
 }
@@ -156,7 +158,7 @@ page {
 .style-price {
   display: block;
   font-size: 24rpx;
-  color: #4f8cff;
+  color: #ff6b35;
   padding: 0 16rpx 16rpx;
   text-align: center;
   font-weight: 600;
@@ -175,38 +177,39 @@ page {
 }
 
 .size-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
+  background: #ffffff;
+  border: 2rpx solid transparent;
   border-radius: 16rpx;
   padding: 24rpx;
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .size-item.active {
-  border-color: #4f8cff;
-  background: rgba(79, 140, 255, 0.1);
+  border-color: #07c160;
+  background: rgba(7, 193, 96, 0.1);
 }
 
 .size-name {
   display: block;
   font-size: 28rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 8rpx;
 }
 
 .size-desc {
   display: block;
   font-size: 24rpx;
-  color: #8891a4;
+  color: #666666;
   margin-bottom: 12rpx;
 }
 
 .size-price {
   display: block;
   font-size: 26rpx;
-  color: #4f8cff;
+  color: #ff6b35;
   font-weight: 600;
 }
 
@@ -223,17 +226,18 @@ page {
 }
 
 .mat-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
+  background: #ffffff;
+  border: 2rpx solid transparent;
   border-radius: 16rpx;
   padding: 24rpx;
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .mat-item.active {
-  border-color: #4f8cff;
-  background: rgba(79, 140, 255, 0.1);
+  border-color: #07c160;
+  background: rgba(7, 193, 96, 0.1);
 }
 
 .mat-color {
@@ -241,13 +245,13 @@ page {
   height: 60rpx;
   border-radius: 50%;
   margin: 0 auto 12rpx;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2rpx solid #e0e0e0;
 }
 
 .mat-name {
   display: block;
   font-size: 24rpx;
-  color: #e7ecf3;
+  color: #333333;
 }
 
 /* 操作区域 */
@@ -256,13 +260,14 @@ page {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(11, 12, 16, 0.95);
-  backdrop-filter: blur(20rpx);
+  background: #ffffff;
   padding: 32rpx;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-top: 1rpx solid #f0f0f0;
   display: flex;
   align-items: center;
   gap: 24rpx;
+  z-index: 100;
 }
 
 .price-info {
@@ -272,7 +277,7 @@ page {
 .price-label {
   display: block;
   font-size: 24rpx;
-  color: #8891a4;
+  color: #666666;
   margin-bottom: 4rpx;
 }
 
@@ -280,16 +285,16 @@ page {
   display: block;
   font-size: 36rpx;
   font-weight: 700;
-  color: #4f8cff;
+  color: #ff6b35;
 }
 
 .preview-btn {
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  background: linear-gradient(135deg, #07c160, #10ad6a);
+  color: white;
   border: none;
   border-radius: 16rpx;
   padding: 24rpx 48rpx;
-  color: #ffffff;
   font-size: 28rpx;
   font-weight: 600;
-  box-shadow: 0 8rpx 32rpx rgba(79, 140, 255, 0.3);
+  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.3);
 }

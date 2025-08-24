@@ -1,4 +1,9 @@
 <!-- 个人中心页面 -->
 <view class="page">
-  <text>个人中心页面</text>
+  <view class="empty-state">
+    <text class="empty-icon">👤</text>
+    <text class="empty-title">个人中心</text>
+    <text class="empty-desc">功能开发中，敬请期待</text>
+    <button class="empty-btn" bindtap="goHome">返回首页</button>
+  </view>
 </view>

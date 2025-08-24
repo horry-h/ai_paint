@@ -6,5 +6,11 @@ Page({
   
   onLoad() {
     // 页面加载
+  },
+  
+  goHome() {
+    wx.switchTab({
+      url: '/pages/index/index'
+    })
   }
 })

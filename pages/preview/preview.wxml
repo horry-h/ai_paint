@@ -1,61 +1,67 @@
 <!-- 3D预览页面 -->
 <view class="page">
-  <!-- 3D预览区域 -->
+  <!-- 预览区域 -->
   <view class="preview-section">
-    <view class="preview-container">
-      <!-- 触摸提示 -->
-      <view class="touch-hint" wx:if="{{!isLoading && !loadError && showTouchHint}}">
-        <text class="hint-text">👆 触摸旋转 | 双击重置</text>
-      </view>
-      
-      <!-- 3D模型容器 - 根据微信官方文档修改 -->
-      <view 
-        style="height: 100%; width: 100%;" 
-        bindtouchstart="documentTouchStart" 
-        bindtouchmove="documentTouchMove" 
-        bindtouchend="documentTouchEnd"
-      >
-        <canvas 
-          type="webgl" 
-          id="webgl" 
-          class="webgl-canvas"
-          bindtouchstart="touchStart"
-          bindtouchmove="touchMove"
-          bindtouchend="touchEnd"
-          bindtouchcancel="touchCancel"
-          bindlongtap="longTap"
-          bindtap="tap"
-          wx:if="{{webglSupported}}"
-        ></canvas>
-      </view>
-      
-      <!-- 备用2D预览 -->
-      <view 
-        class="fallback-preview" 
-        wx:if="{{!webglSupported}}"
-        bindtouchstart="onTouchStart"
-        bindtouchmove="onTouchMove"
-        bindtouchend="onTouchEnd"
-      >
-        <view class="frame-preview" style="transform: rotateY({{rotationY}}deg) rotateX({{rotationX}}deg);">
-          <view class="model-placeholder">
-            <text class="placeholder-text">3D模型预览</text>
-            <text class="placeholder-subtext">WebGL不支持时显示</text>
+    <!-- 预览框容器 -->
+    <view class="preview-frame">
+      <view class="preview-container">
+        <!-- 触摸提示 -->
+        <view class="touch-hint" wx:if="{{!isLoading && !loadError && showTouchHint}}">
+          <text class="hint-text">👆 触摸旋转 | 双指缩放 | 双击重置全部</text>
+        </view>
+        
+        <!-- 3D模型容器 -->
+        <view 
+          class="model-container"
+          bindtouchstart="documentTouchStart" 
+          bindtouchmove="documentTouchMove" 
+          bindtouchend="documentTouchEnd"
+        >
+          <canvas 
+            type="webgl" 
+            id="webgl" 
+            class="webgl-canvas"
+            bindtouchstart="touchStart"
+            bindtouchmove="touchMove"
+            bindtouchend="touchEnd"
+            bindtouchcancel="touchCancel"
+            bindlongtap="longTap"
+            bindtap="tap"
+            wx:if="{{webglSupported}}"
+          ></canvas>
+        </view>
+        
+        <!-- 备用2D预览 -->
+        <view 
+          class="fallback-preview" 
+          wx:if="{{!webglSupported}}"
+          bindtouchstart="documentTouchStart"
+          bindtouchmove="documentTouchMove"
+          bindtouchend="documentTouchEnd"
+        >
+          <view class="frame-preview" style="transform: rotateY({{rotationY}}deg) rotateX({{rotationX}}deg) scale({{scale}});">
+            <view class="model-placeholder">
+              <text class="placeholder-text">相框预览</text>
+              <text class="placeholder-subtext">2D模式显示</text>
+              <view class="frame-placeholder" style="background: {{aiGeneratedColor || '#8B4513'}}">
+                <text class="frame-text">相框</text>
+              </view>
+            </view>
           </view>
         </view>
-      </view>
-      
-      <!-- 加载状态 -->
-      <view class="loading-overlay" wx:if="{{isLoading}}">
-        <view class="loading-spinner"></view>
-        <text class="loading-text">加载相框3D模型中...</text>
-      </view>
-      
-      <!-- 错误状态 -->
-      <view class="error-overlay" wx:if="{{loadError && !modelLoaded}}">
-        <text class="error-icon">⚠️</text>
-        <text class="error-text">相框3D模型加载失败</text>
-        <button class="retry-btn" bindtap="retryLoad">重试</button>
+        
+        <!-- 加载状态 -->
+        <view class="loading-overlay" wx:if="{{isLoading}}">
+          <view class="loading-spinner"></view>
+          <text class="loading-text">加载相框3D模型中...</text>
+        </view>
+        
+        <!-- 错误状态 -->
+        <view class="error-overlay" wx:if="{{loadError && !modelLoaded}}">
+          <text class="error-icon">⚠️</text>
+          <text class="error-text">相框3D模型加载失败</text>
+          <button class="retry-btn" bindtap="retryLoad">重试</button>
+        </view>
       </view>
     </view>
   </view>
@@ -63,12 +69,20 @@
   <!-- 控制按钮 -->
   <view class="controls-section">
     <view class="control-tips">
-      <text class="tip-text">💡 提示：触摸屏幕旋转相框模型，双击重置视角，支持手势操作</text>
+      <text class="tip-text">💡 提示：触摸屏幕旋转相框模型，双指缩放，双击重置全部，支持手势操作</text>
     </view>
+    
+    <!-- 缩放控制 -->
+    <view class="scale-controls">
+      <button class="scale-btn" bindtap="zoomOut">缩小</button>
+      <button class="scale-btn" bindtap="resetScale">重置缩放</button>
+      <button class="scale-btn" bindtap="zoomIn">放大</button>
+    </view>
+    
     <view class="control-row">
       <button class="control-btn" bindtap="rotateLeft">左转</button>
       <button class="control-btn" bindtap="rotateRight">右转</button>
-      <button class="control-btn" bindtap="resetRotation">重置</button>
+      <button class="scale-btn" bindtap="resetAll">重置全部</button>
       <button class="control-btn" bindtap="toggleAutoRotate">{{autoRotate ? '停止' : '自动'}}旋转</button>
     </view>
   </view>

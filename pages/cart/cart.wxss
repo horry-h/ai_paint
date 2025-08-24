@@ -1,1 +1,56 @@
-page{background:#0b0c10;color:#e7ecf3;}.page{padding:32rpx;}
+/** 购物车页面 - 微信风格卡片设计 */
+page {
+  background: #f7f7f7;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 120rpx 40rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid #f0f0f0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 32rpx;
+  opacity: 0.3;
+  color: #666666;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.5;
+  margin-bottom: 48rpx;
+}
+
+.empty-btn {
+  background: linear-gradient(135deg, #07c160, #10ad6a);
+  color: #ffffff;
+  border: none;
+  border-radius: 16rpx;
+  padding: 24rpx 48rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.3);
+}

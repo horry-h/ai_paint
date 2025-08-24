@@ -1,8 +1,8 @@
-/** 上传页面样式 */
+/** 上传页面 - 微信风格卡片设计 */
 page {
-  background: linear-gradient(135deg, #0b0c10 0%, #1a1d2a 100%);
-  color: #e7ecf3;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f7f7f7;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .page {
@@ -16,26 +16,27 @@ page {
 }
 
 .upload-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #f0f0f0;
   border-radius: 24rpx;
   padding: 32rpx;
-  backdrop-filter: blur(20rpx);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
 }
 
 .upload-area {
   min-height: 400rpx;
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2rpx dashed #e0e0e0;
   border-radius: 16rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  background: #fafafa;
 }
 
 .upload-area:active {
-  border-color: #4f8cff;
-  background: rgba(79, 140, 255, 0.05);
+  border-color: #07c160;
+  background: rgba(7, 193, 96, 0.05);
 }
 
 .preview-image {
@@ -54,21 +55,21 @@ page {
   display: block;
   font-size: 80rpx;
   margin-bottom: 24rpx;
-  opacity: 0.6;
+  color: #666666;
 }
 
 .upload-text {
   display: block;
   font-size: 32rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 12rpx;
 }
 
 .upload-desc {
   display: block;
   font-size: 26rpx;
-  color: #8891a4;
+  color: #666666;
 }
 
 /* 裁切区域 */
@@ -80,7 +81,7 @@ page {
   display: block;
   font-size: 32rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 24rpx;
 }
 
@@ -91,31 +92,36 @@ page {
 }
 
 .crop-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid transparent;
+  background: #ffffff;
+  border: 2rpx solid transparent;
   border-radius: 16rpx;
   padding: 24rpx;
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .crop-item.active {
-  border-color: #4f8cff;
-  background: rgba(79, 140, 255, 0.1);
+  border-color: #07c160;
+  background: rgba(7, 193, 96, 0.1);
 }
 
 .crop-preview {
   width: 100%;
   max-width: 120rpx;
   margin: 0 auto 16rpx;
-  background: rgba(255, 255, 255, 0.1);
+  background: #fafafa;
   border-radius: 8rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .crop-name {
   display: block;
   font-size: 26rpx;
-  color: #e7ecf3;
+  color: #333333;
 }
 
 /* 操作区域 */
@@ -127,23 +133,26 @@ page {
 
 .btn-secondary {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1rpx solid #e0e0e0;
   border-radius: 16rpx;
   padding: 24rpx;
-  color: #e7ecf3;
+  color: #333333;
   font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
 }
 
 .btn-primary {
   flex: 1;
-  background: linear-gradient(135deg, #4f8cff, #7c3aed);
+  background: linear-gradient(135deg, #07c160, #10ad6a);
   border: none;
   border-radius: 16rpx;
   padding: 24rpx;
   color: #ffffff;
   font-size: 28rpx;
   font-weight: 600;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.2);
 }
 
 /* 空状态 */
@@ -160,19 +169,20 @@ page {
   font-size: 80rpx;
   margin-bottom: 32rpx;
   opacity: 0.5;
+  color: #666666;
 }
 
 .empty-title {
   display: block;
   font-size: 36rpx;
   font-weight: 600;
-  color: #e7ecf3;
+  color: #333333;
   margin-bottom: 16rpx;
 }
 
 .empty-desc {
   display: block;
   font-size: 28rpx;
-  color: #8891a4;
+  color: #666666;
   line-height: 1.5;
 }

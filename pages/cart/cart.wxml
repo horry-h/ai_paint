@@ -1,4 +1,9 @@
 <!-- 购物车页面 -->
 <view class="page">
-  <text>购物车页面</text>
+  <view class="empty-state">
+    <text class="empty-icon">🛒</text>
+    <text class="empty-title">购物车空空如也</text>
+    <text class="empty-desc">快去挑选心仪的相框吧</text>
+    <button class="empty-btn" bindtap="goShopping">去购物</button>
+  </view>
 </view>
